@@ -1,0 +1,3 @@
+-r requirements-actions.lock
+pytest==5.3.5
+pytest-envfiles==0.1.0

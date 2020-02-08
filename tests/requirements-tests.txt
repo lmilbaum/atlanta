@@ -1,0 +1,3 @@
+-r requirments-actions.txt
+pytest
+pytest-envfiles
