@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
+        python-version: [3.7]
 
     steps:
     - uses: actions/checkout@v2
@@ -19,7 +19,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
+        mkdir geckodriver
+        tar -xzf geckodriver-v0.26.0-linux64.tar.gz -C geckodriver
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -28,6 +30,11 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
+      env:
+        username: ${{ secrets.username }}
+        password: ${{ secrets.password }}
+        displayname: ${{ secrets.displayname }}
       run: |
         pip install pytest
+        pip install -r tests/requirements-actions.lock
         pytest
